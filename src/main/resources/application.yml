@@ -1,6 +1,21 @@
 spring:
   application:
     name: @project.artifactId@
+  datasource:
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.sql
+
 server:
   port: 0
 eureka:

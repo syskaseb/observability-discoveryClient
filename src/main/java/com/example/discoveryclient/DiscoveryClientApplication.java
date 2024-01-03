@@ -1,7 +1,7 @@
 package com.example.discoveryclient;
 
 import com.netflix.discovery.EurekaClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @EnableDiscoveryClient
 @SpringBootApplication
+@RequiredArgsConstructor
 @RestController
 public class DiscoveryClientApplication implements GreetingController {
 
-    @Autowired
-    private EurekaClient eurekaClient;
-
-    @Autowired
-    private Environment environment;
+    private final EurekaClient eurekaClient;
+    private final Environment environment;
 
     @Value("${spring.application.name}")
     private String appName;
