@@ -53,7 +53,7 @@
                 <pattern>${json_pattern}</pattern>
             </layout>
         </encoder>
-        <topic>eureka-server-logs</topic>
+        <topic>eureka-client-logs</topic>
         <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
 
@@ -61,7 +61,7 @@
         <!-- <partition>0</partition> -->
 
         <!-- Optional parameter to include log timestamps into the kafka message -->
-        <appendTimestamp>true</appendTimestamp>
+        <!--        <appendTimestamp>true</appendTimestamp>-->
 
         <!-- each <producerConfig> translates to regular kafka-client config (format: key=value) -->
         <!-- producer configs are documented here: https://kafka.apache.org/documentation.html#newproducerconfigs -->
