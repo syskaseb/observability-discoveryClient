@@ -15,7 +15,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
-        <hibernate-tools.version>6.4.0.Final</hibernate-tools.version>
+        <hibernate-tools.version>6.4.1.Final</hibernate-tools.version>
     </properties>
     <dependencies>
         <dependency>
@@ -114,6 +114,13 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
+                </configuration>
+            </plugin>
+            <plugin>
                 <!-- https://mvnrepository.com/artifact/org.hibernate.tool/hibernate-tools-maven -->
                 <groupId>org.hibernate.tool</groupId>
                 <artifactId>hibernate-tools-maven</artifactId>
@@ -138,7 +145,8 @@
                             <goal>hbm2java</goal>
                         </goals>
                         <configuration>
-                            <propertyFile>src/main/resources/hibernate/hibernate.properties</propertyFile>
+                            <propertyFile>src/main/resources/hibernate-tools/hibernate.properties</propertyFile>
+                            <revengFile>src/main/resources/reveng.xml</revengFile>
                             <outputDirectory>target/generated-sources/annotations</outputDirectory>
                             <packageName>com.example.discoveryclient.model</packageName>
                             <ejb3>true</ejb3>

@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
---changeset syskas01:initial-schema
-CREATE TABLE job_offers
+--changeset syskas01:001_init_schema
+CREATE TABLE IF NOT EXISTS job_offer
 (
     id          INT PRIMARY KEY,
     title       VARCHAR(255),
@@ -13,21 +13,21 @@ CREATE TABLE job_offers
     posted_date DATE
 );
 
-CREATE TABLE employers
+CREATE TABLE IF NOT EXISTS employer
 (
     id       INT PRIMARY KEY,
     name     VARCHAR(255),
     industry VARCHAR(255)
 );
 
-CREATE TABLE applicants
+CREATE TABLE IF NOT EXISTS applicant
 (
     id     INT PRIMARY KEY,
     name   VARCHAR(255),
     skills VARCHAR(255)
 );
 
-CREATE TABLE applications
+CREATE TABLE IF NOT EXISTS application
 (
     id               INT PRIMARY KEY,
     job_offer_id     INT,
@@ -36,7 +36,9 @@ CREATE TABLE applications
     application_date DATE
 );
 
---rollback DROP TABLE applications;
---rollback DROP TABLE applicants;
---rollback DROP TABLE employers;
---rollback DROP TABLE job_offers;
+CREATE TABLE IF NOT EXISTS some_test
+(
+    id     INT PRIMARY KEY,
+    name   VARCHAR(255),
+    test_field VARCHAR(255)
+);
