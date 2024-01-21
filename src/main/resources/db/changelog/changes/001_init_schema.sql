@@ -1,44 +1,59 @@
 --liquibase formatted sql
 
---changeset syskas01:001_init_schema
-CREATE TABLE IF NOT EXISTS job_offer
+--changeset syskas01:001_init_schema.sql
+create table if not exists employer
 (
-    id          INT PRIMARY KEY,
-    title       VARCHAR(255),
-    description TEXT,
-    location    VARCHAR(255),
-    salary_min  INT,
-    salary_max  INT,
-    employer_id INT,
-    posted_date DATE
+    id       integer not null,
+    name     varchar(255),
+    industry varchar(255),
+    constraint employers_pkey
+        primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS employer
+create table if not exists applicant
 (
-    id       INT PRIMARY KEY,
-    name     VARCHAR(255),
-    industry VARCHAR(255)
+    id     bigint not null,
+    name   varchar(255),
+    skills varchar(255),
+    constraint applicants_pkey
+        primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS applicant
+create table if not exists job_offer
 (
-    id     INT PRIMARY KEY,
-    name   VARCHAR(255),
-    skills VARCHAR(255)
+    id          integer not null,
+    title       varchar(255),
+    description varchar(255),
+    location    varchar(255),
+    salary_min  integer,
+    salary_max  integer,
+    employer_id integer,
+    posted_date timestamp(6),
+    constraint job_offers_pkey
+        primary key (id),
+    constraint fk1f415g3a9sgqbq00grclvn43t
+        foreign key (employer_id) references employer
 );
 
-CREATE TABLE IF NOT EXISTS application
+create table if not exists application
 (
-    id               INT PRIMARY KEY,
-    job_offer_id     INT,
-    applicant_id     INT,
-    status           VARCHAR(255),
-    application_date DATE
+    id               integer not null,
+    job_offer_id     integer,
+    applicant_id     bigint,
+    status           varchar(255),
+    application_date timestamp(6),
+    constraint applications_pkey
+        primary key (id),
+    constraint fkrc3gxkxtsq5jqx764drr3wug5
+        foreign key (applicant_id) references applicant,
+    constraint fkjp7yaago8i6ndvghp4ww8m6f1
+        foreign key (job_offer_id) references job_offer
 );
 
-CREATE TABLE IF NOT EXISTS some_test
+create table if not exists some_test
 (
-    id     INT PRIMARY KEY,
-    name   VARCHAR(255),
-    test_field VARCHAR(255)
+    id         integer not null,
+    name       varchar(255),
+    test_field varchar(255),
+    primary key (id)
 );

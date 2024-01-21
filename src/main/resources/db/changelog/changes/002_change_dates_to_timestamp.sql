@@ -2,7 +2,7 @@
 
 --changeset syskas01:002_change_dates_to_timestamp
 ALTER TABLE application
-ALTER COLUMN application_date TYPE TIMESTAMP;
+ALTER COLUMN application_date TYPE TIMESTAMP(4);
 
 ALTER TABLE job_offer
-ALTER COLUMN posted_date TYPE TIMESTAMP;
+ALTER COLUMN posted_date TYPE TIMESTAMP(4);
