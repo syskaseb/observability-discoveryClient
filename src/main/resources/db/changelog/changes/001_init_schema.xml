@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="001_init_schema" author="syskas01">
+        <sql>
+            CREATE TABLE IF NOT EXISTS employer (
+                id INTEGER NOT NULL,
+                name VARCHAR(255),
+                industry VARCHAR(255),
+                CONSTRAINT employers_pkey PRIMARY KEY (id)
+                );
+
+            CREATE TABLE IF NOT EXISTS applicant (
+                id BIGINT NOT NULL,
+                name VARCHAR(255),
+                skills VARCHAR(255),
+                CONSTRAINT applicants_pkey PRIMARY KEY (id)
+                );
+
+            CREATE TABLE IF NOT EXISTS job_offer (
+                id INTEGER NOT NULL,
+                title VARCHAR(255),
+                description VARCHAR(255),
+                location VARCHAR(255),
+                salary_min INTEGER,
+                salary_max INTEGER,
+                employer_id INTEGER,
+                posted_date TIMESTAMP(4),
+                CONSTRAINT job_offers_pkey PRIMARY KEY (id),
+                CONSTRAINT fk_employer FOREIGN KEY (employer_id) REFERENCES employer
+                );
+
+            CREATE TABLE IF NOT EXISTS application (
+                id INTEGER NOT NULL,
+                job_offer_id INTEGER,
+                applicant_id BIGINT,
+                status VARCHAR(255),
+                application_date TIMESTAMP(4),
+                CONSTRAINT applications_pkey PRIMARY KEY (id),
+                CONSTRAINT fk_applicant FOREIGN KEY (applicant_id) REFERENCES applicant,
+                CONSTRAINT fk_job_offer FOREIGN KEY (job_offer_id) REFERENCES job_offer
+                );
+
+            CREATE TABLE IF NOT EXISTS some_test (
+                id INTEGER NOT NULL,
+                name VARCHAR(255),
+                test_field VARCHAR(255),
+                PRIMARY KEY (id)
+                );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS employer;
+                DROP TABLE IF EXISTS applicant;
+                DROP TABLE IF EXISTS job_offer;
+                DROP TABLE IF EXISTS application;
+                DROP TABLE IF EXISTS applicant;
+                DROP TABLE IF EXISTS some_test;
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="001_tag_1.0.0" author="syskas01">
+        <tagDatabase tag="1.0.0"/>
+    </changeSet>
+
+</databaseChangeLog>

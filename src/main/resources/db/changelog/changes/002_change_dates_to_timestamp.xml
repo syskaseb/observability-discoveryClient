@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="002_change_dates_to_timestamp" author="syskas01">
+        <sql>
+            ALTER TABLE application ALTER COLUMN application_date TYPE TIMESTAMP(6);
+            ALTER TABLE job_offer ALTER COLUMN posted_date TYPE TIMESTAMP(6);
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE application ALTER COLUMN application_date TYPE TIMESTAMP(4);
+                ALTER TABLE job_offer ALTER COLUMN posted_date TYPE TIMESTAMP(4);
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
