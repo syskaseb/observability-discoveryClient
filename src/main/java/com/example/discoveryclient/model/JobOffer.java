@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "job_offer")
+@NamedEntityGraph(name = "JobOffer.withApplications",
+        attributeNodes = @NamedAttributeNode(value = "applications"))
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
