@@ -1,9 +1,14 @@
 package com.example.discoveryclient.repository;
 
 import com.example.discoveryclient.model.Applicant;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ApplicantRepository {
+    Optional<Applicant> findById(long id);
+    Applicant save(Applicant applicant);
+    void update(Applicant applicant);
+    void deleteById(long id);
+    List<Applicant> findAll();
 }

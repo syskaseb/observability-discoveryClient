@@ -11,12 +11,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
 @Table(name = "job_offer")
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobOffer {
@@ -24,7 +26,7 @@ public class JobOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "title")
     private String title;

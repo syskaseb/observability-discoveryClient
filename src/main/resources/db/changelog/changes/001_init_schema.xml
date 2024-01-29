@@ -8,7 +8,7 @@
     <changeSet id="001_init_schema" author="syskas01">
         <sql>
             CREATE TABLE IF NOT EXISTS employer (
-                id INTEGER NOT NULL,
+                id BIGINT NOT NULL,
                 name VARCHAR(255),
                 industry VARCHAR(255),
                 CONSTRAINT employers_pkey PRIMARY KEY (id)
@@ -22,21 +22,21 @@
                 );
 
             CREATE TABLE IF NOT EXISTS job_offer (
-                id INTEGER NOT NULL,
+                id BIGINT NOT NULL,
                 title VARCHAR(255),
                 description VARCHAR(255),
                 location VARCHAR(255),
                 salary_min INTEGER,
                 salary_max INTEGER,
-                employer_id INTEGER,
+                employer_id BIGINT,
                 posted_date TIMESTAMP(4),
                 CONSTRAINT job_offers_pkey PRIMARY KEY (id),
                 CONSTRAINT fk_employer FOREIGN KEY (employer_id) REFERENCES employer
                 );
 
             CREATE TABLE IF NOT EXISTS application (
-                id INTEGER NOT NULL,
-                job_offer_id INTEGER,
+                id BIGINT NOT NULL,
+                job_offer_id BIGINT,
                 applicant_id BIGINT,
                 status VARCHAR(255),
                 application_date TIMESTAMP(4),

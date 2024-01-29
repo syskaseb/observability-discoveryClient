@@ -10,6 +10,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Set;
 
@@ -18,12 +20,19 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@RepositoryRestResource
 public class Applicant {
+
+    public Applicant(long id, String name, String skills) {
+        this.id = id;
+        this.name = name;
+        this.skills = skills;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -32,5 +41,6 @@ public class Applicant {
     private String skills;
 
     @OneToMany(mappedBy = "applicant")
+    @Setter
     private Set<Application> applications;
 }
