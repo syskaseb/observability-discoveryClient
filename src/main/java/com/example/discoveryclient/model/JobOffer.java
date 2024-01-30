@@ -1,5 +1,6 @@
 package com.example.discoveryclient.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,9 +52,24 @@ public class JobOffer {
     @JoinColumn(name = "employer_id")
     private Employer employer;
 
-    @OneToMany(mappedBy = "jobOffer")
+    @OneToMany(mappedBy = "jobOffer", cascade = CascadeType.PERSIST)
     private Set<Application> applications;
 
     @Column(name = "posted_date")
     private Timestamp postedDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JobOffer jobOffer = (JobOffer) o;
+
+        return id.equals(jobOffer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

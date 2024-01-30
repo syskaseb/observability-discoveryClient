@@ -1,8 +1,8 @@
 package com.example.discoveryclient.controller;
 
 import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.service.ApplicantService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.discoveryclient.service.impl.ApplicantServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/applicants")
 public class ApplicantController {
 
-    private final ApplicantService applicantService;
-
-    @Autowired
-    public ApplicantController(ApplicantService applicantService) {
-        this.applicantService = applicantService;
-    }
+    private final ApplicantServiceImpl applicantService;
 
     @GetMapping
     public ResponseEntity<List<Applicant>> getAllApplicants() {

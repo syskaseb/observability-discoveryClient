@@ -1,6 +1,7 @@
 package com.example.discoveryclient.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,26 @@ public class Employer {
     @Column(name = "industry")
     private String industry;
 
-    @OneToMany(mappedBy = "employer")
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<JobOffer> jobOffers;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employer employer = (Employer) o;
+
+        if (!getId().equals(employer.getId())) return false;
+        if (getName() != null ? !getName().equals(employer.getName()) : employer.getName() != null) return false;
+        return getIndustry() != null ? getIndustry().equals(employer.getIndustry()) : employer.getIndustry() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getIndustry() != null ? getIndustry().hashCode() : 0);
+        return result;
+    }
 }

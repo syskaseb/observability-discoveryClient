@@ -1,5 +1,6 @@
 package com.example.discoveryclient.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,7 +46,22 @@ public class Applicant implements Serializable {
     @Column(name = "skills")
     private String skills;
 
-    @OneToMany(mappedBy = "applicant")
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
     @Setter
     private Set<Application> applications;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Applicant applicant = (Applicant) o;
+
+        return getId().equals(applicant.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }
