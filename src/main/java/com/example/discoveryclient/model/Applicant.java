@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -21,7 +23,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @RepositoryRestResource
-public class Applicant {
+public class Applicant implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public Applicant(long id, String name, String skills) {
         this.id = id;
