@@ -83,6 +83,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
@@ -164,7 +168,7 @@
                             <propertyFile>src/main/resources/hibernate-tools/hibernate.properties</propertyFile>
                             <revengFile>src/main/resources/reveng.xml</revengFile>
                             <outputDirectory>target/generated-sources/annotations</outputDirectory>
-                            <packageName>com.example.discoveryclient.model</packageName>
+                            <packageName>com.example.discoveryclient.sometest</packageName>
                             <ejb3>true</ejb3>
                         </configuration>
                     </execution>

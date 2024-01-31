@@ -5,6 +5,8 @@ import com.example.discoveryclient.applicant.infrastructure.Applicant;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     @Retryable(retryFor = Exception.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
     @CircuitBreaker(name = "applicantService", fallbackMethod = "fallbackFindAll")
-    public List<Applicant> findAll() {
-        return applicantRepository.findAll();
+    public Page<Applicant> findAll(Pageable pageable) {
+        return applicantRepository.findAll(pageable);
     }
 
     private List<Applicant> fallbackFindAll() {

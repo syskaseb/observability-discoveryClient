@@ -1,6 +1,8 @@
 package com.example.discoveryclient.applicant.domain.repository;
 
 import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,5 +17,5 @@ public interface ApplicantRepository {
 
     void deleteById(long id);
 
-    List<Applicant> findAll();
+    Page<Applicant> findAll(Pageable pageable);
 }

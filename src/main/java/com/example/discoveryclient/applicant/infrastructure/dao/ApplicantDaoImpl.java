@@ -4,6 +4,9 @@ import com.example.discoveryclient.applicant.infrastructure.Applicant;
 import com.example.discoveryclient.application.Application;
 import com.example.discoveryclient.joboffer.JobOffer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -27,8 +30,17 @@ public class ApplicantDaoImpl implements ApplicantDao {
     );
 
     @Override
-    public List<Applicant> findAll() {
-        return jdbcTemplate.query("SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id", applicantRowMapper);
+    public Page<Applicant> findAll(Pageable pageable) {
+        String sql = "SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id LIMIT ? OFFSET ?";
+        List<Applicant> applicants = jdbcTemplate.query(sql, applicantRowMapper, pageable.getPageSize(), pageable.getOffset());
+        long total = countTotalApplicants();
+
+        return new PageImpl<>(applicants, pageable, total);
+    }
+
+    private long countTotalApplicants() {
+        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM applicant", Long.class);
+        return Optional.ofNullable(count).orElse(0L);
     }
 
     @Override

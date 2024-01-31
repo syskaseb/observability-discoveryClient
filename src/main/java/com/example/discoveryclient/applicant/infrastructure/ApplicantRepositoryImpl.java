@@ -5,14 +5,15 @@ import com.example.discoveryclient.applicant.infrastructure.dao.ApplicantDao;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
 import java.util.Optional;
 
 @RepositoryRestResource
-@Component
+@Repository
 public class ApplicantRepositoryImpl implements ApplicantRepository {
 
     private final ApplicantDao applicantDAO;
@@ -46,8 +47,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     }
 
     @Override
-    @Cacheable("applicants")
-    public List<Applicant> findAll() {
-        return applicantDAO.findAll();
+    public Page<Applicant> findAll(Pageable pageable) {
+        return applicantDAO.findAll(pageable);
     }
 }
