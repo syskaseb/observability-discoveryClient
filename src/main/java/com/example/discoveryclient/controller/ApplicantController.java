@@ -1,7 +1,7 @@
 package com.example.discoveryclient.controller;
 
 import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.service.impl.ApplicantServiceImpl;
+import com.example.discoveryclient.service.ApplicantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/applicants")
 public class ApplicantController {
 
-    private final ApplicantServiceImpl applicantService;
+    private final ApplicantService applicantService;
 
     @GetMapping
     public ResponseEntity<List<Applicant>> getAllApplicants() {
