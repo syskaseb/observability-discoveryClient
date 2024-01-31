@@ -1,6 +1,6 @@
-package com.example.discoveryclient.service;
+package com.example.discoveryclient.applicant.domain.service;
 
-import com.example.discoveryclient.model.Applicant;
+import com.example.discoveryclient.applicant.infrastructure.Applicant;
 
 import java.util.List;
 import java.util.Optional;

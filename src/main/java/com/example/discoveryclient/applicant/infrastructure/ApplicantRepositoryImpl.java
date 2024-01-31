@@ -1,15 +1,18 @@
-package com.example.discoveryclient.repository.impl;
+package com.example.discoveryclient.applicant.infrastructure;
 
-import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.repository.ApplicantRepository;
+import com.example.discoveryclient.applicant.domain.repository.ApplicantRepository;
+import com.example.discoveryclient.applicant.infrastructure.dao.ApplicantDao;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@RepositoryRestResource
+@Component
 public class ApplicantRepositoryImpl implements ApplicantRepository {
 
     private final ApplicantDao applicantDAO;

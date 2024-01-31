@@ -1,5 +1,6 @@
-package com.example.discoveryclient.model;
+package com.example.discoveryclient.applicant.infrastructure;
 
+import com.example.discoveryclient.application.Application;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.example.discoveryclient;
+package com.example.discoveryclient.greeting;
 
 import org.springframework.web.bind.annotation.GetMapping;
 

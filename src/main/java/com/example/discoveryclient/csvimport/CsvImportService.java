@@ -1,4 +1,4 @@
-package com.example.discoveryclient.service;
+package com.example.discoveryclient.csvimport;
 
 import org.springframework.web.multipart.MultipartFile;
 

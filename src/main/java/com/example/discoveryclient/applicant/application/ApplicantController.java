@@ -1,7 +1,7 @@
-package com.example.discoveryclient.controller;
+package com.example.discoveryclient.applicant.application;
 
-import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.service.ApplicantService;
+import com.example.discoveryclient.applicant.domain.service.ApplicantService;
+import com.example.discoveryclient.applicant.infrastructure.Applicant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -59,9 +59,11 @@ public class ApplicantController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteApplicant(@PathVariable Long id) {
-        return applicantService.findById(id).map(it -> {
-            applicantService.deleteById(it.getId());
-            return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.notFound().build());
+        return applicantService.findById(id)
+                .map(it -> {
+                    applicantService.deleteById(it.getId());
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

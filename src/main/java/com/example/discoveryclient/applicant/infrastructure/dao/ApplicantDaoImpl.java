@@ -1,12 +1,12 @@
-package com.example.discoveryclient.repository.impl;
+package com.example.discoveryclient.applicant.infrastructure.dao;
 
-import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.model.Application;
-import com.example.discoveryclient.model.JobOffer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import com.example.discoveryclient.application.Application;
+import com.example.discoveryclient.joboffer.JobOffer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class ApplicantDao {
+@Service
+@RequiredArgsConstructor
+public class ApplicantDaoImpl implements ApplicantDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -25,15 +26,12 @@ public class ApplicantDao {
             resultSet.getString("skills")
     );
 
-    @Autowired
-    public ApplicantDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
+    @Override
     public List<Applicant> findAll() {
         return jdbcTemplate.query("SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id", applicantRowMapper);
     }
 
+    @Override
     public Optional<Applicant> findById(Long id) {
         return jdbcTemplate.query(
                 "SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id WHERE a.id = ?",
@@ -42,17 +40,20 @@ public class ApplicantDao {
         ).stream().findFirst();
     }
 
+    @Override
     public Applicant save(Applicant applicant) {
         jdbcTemplate.update("INSERT INTO applicant (name, skills) VALUES (?, ?)",
                 applicant.getName(), applicant.getSkills());
         return applicant;
     }
 
+    @Override
     public void update(Applicant applicant) {
         jdbcTemplate.update("UPDATE applicant SET name = ?, skills = ? WHERE id = ?",
                 applicant.getName(), applicant.getSkills(), applicant.getId());
     }
 
+    @Override
     public void deleteById(Long id) {
         jdbcTemplate.update("DELETE FROM applicant WHERE id = ?", id);
     }
@@ -73,7 +74,7 @@ public class ApplicantDao {
                 if (!rs.wasNull()) {
                     // Create JobOffer object (assuming you have a no-arg constructor and setters)
                     JobOffer jobOffer = new JobOffer();
-                    jobOffer.setId(rs.getLong("job_offer_id")); // Set job offer id and other properties if needed
+                    jobOffer.setId(rs.getLong("job_offer_id"));
 
                     // Create Application object
                     Application application = new Application();

@@ -1,40 +1,35 @@
-package com.example.discoveryclient.service.impl;
+package com.example.discoveryclient.applicant.domain.service;
 
-import com.example.discoveryclient.model.Applicant;
-import com.example.discoveryclient.repository.ApplicantRepository;
-import com.example.discoveryclient.service.ApplicantService;
+import com.example.discoveryclient.applicant.domain.repository.ApplicantRepository;
+import com.example.discoveryclient.applicant.infrastructure.Applicant;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class ApplicantServiceImpl implements ApplicantService {
 
     private final ApplicantRepository applicantRepository;
 
-    @Autowired
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository) {
-        this.applicantRepository = applicantRepository;
-    }
-
     @Override
-    @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(retryFor = Exception.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
     @CircuitBreaker(name = "applicantService", fallbackMethod = "fallbackFindAll")
     public List<Applicant> findAll() {
         return applicantRepository.findAll();
     }
 
     private List<Applicant> fallbackFindAll() {
-        log.warn("service not responsive on finding all applicants, fallback used");
-        return new ArrayList<>();
+        log.warn("service was not responsive when finding all applicants, fallback used");
+        return Collections.emptyList();
     }
 
     @Override

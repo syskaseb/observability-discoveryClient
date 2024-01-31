@@ -1,5 +1,6 @@
 package com.example.discoveryclient;
 
+import com.example.discoveryclient.greeting.GreetingController;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

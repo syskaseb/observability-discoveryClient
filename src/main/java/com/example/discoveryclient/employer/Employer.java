@@ -1,6 +1,7 @@
-package com.example.discoveryclient.model;
+package com.example.discoveryclient.employer;
 
 
+import com.example.discoveryclient.joboffer.JobOffer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

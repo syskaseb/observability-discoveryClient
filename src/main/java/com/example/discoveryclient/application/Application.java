@@ -1,5 +1,7 @@
-package com.example.discoveryclient.model;
+package com.example.discoveryclient.application;
 
+import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import com.example.discoveryclient.joboffer.JobOffer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

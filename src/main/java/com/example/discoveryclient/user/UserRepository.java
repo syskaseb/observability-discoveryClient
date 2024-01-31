@@ -1,6 +1,5 @@
-package com.example.discoveryclient.repository;
+package com.example.discoveryclient.user;
 
-import com.example.discoveryclient.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, String> {

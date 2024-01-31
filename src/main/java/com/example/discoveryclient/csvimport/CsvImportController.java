@@ -1,6 +1,5 @@
-package com.example.discoveryclient.controller;
+package com.example.discoveryclient.csvimport;
 
-import com.example.discoveryclient.service.CsvImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
