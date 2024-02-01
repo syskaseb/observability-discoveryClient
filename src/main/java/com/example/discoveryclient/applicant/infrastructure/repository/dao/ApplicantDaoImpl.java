@@ -1,6 +1,6 @@
-package com.example.discoveryclient.applicant.infrastructure.dao;
+package com.example.discoveryclient.applicant.infrastructure.repository.dao;
 
-import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import com.example.discoveryclient.application.Application;
 import com.example.discoveryclient.joboffer.JobOffer;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -23,16 +26,10 @@ public class ApplicantDaoImpl implements ApplicantDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Applicant> applicantRowMapper = (resultSet, rowNum) -> new Applicant(
-            resultSet.getLong("id"),
-            resultSet.getString("name"),
-            resultSet.getString("skills")
-    );
-
     @Override
     public Page<Applicant> findAll(Pageable pageable) {
-        String sql = "SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id LIMIT ? OFFSET ?";
-        List<Applicant> applicants = jdbcTemplate.query(sql, applicantRowMapper, pageable.getPageSize(), pageable.getOffset());
+        String sql = "SELECT a.id as a_id, name, skills, app.id as application_id, job_offer_id, applicant_id, status, application_date FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id LIMIT ? OFFSET ?";
+        List<Applicant> applicants = jdbcTemplate.query(sql, new ApplicantWithApplicationsRowMapper(), pageable.getPageSize(), pageable.getOffset());
         long total = countTotalApplicants();
 
         return new PageImpl<>(applicants, pageable, total);
@@ -46,7 +43,7 @@ public class ApplicantDaoImpl implements ApplicantDao {
     @Override
     public Optional<Applicant> findById(Long id) {
         return jdbcTemplate.query(
-                "SELECT a.*, app.* FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id WHERE a.id = ?",
+                "SELECT a.id as a_id, name, skills, app.id as application_id, job_offer_id, applicant_id, status, application_date FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id WHERE a.id = ?",
                 new ApplicantWithApplicationsRowMapper(),
                 id
         ).stream().findFirst();
@@ -54,8 +51,22 @@ public class ApplicantDaoImpl implements ApplicantDao {
 
     @Override
     public Applicant save(Applicant applicant) {
-        jdbcTemplate.update("INSERT INTO applicant (name, skills) VALUES (?, ?)",
-                applicant.getName(), applicant.getSkills());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO applicant (name, skills) VALUES (?, ?)",
+                    new String[]{"id"}
+            );
+            ps.setString(1, applicant.getName());
+            ps.setString(2, applicant.getSkills());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            applicant.setId(keyHolder.getKey().longValue());
+        }
+
         return applicant;
     }
 
@@ -72,7 +83,6 @@ public class ApplicantDaoImpl implements ApplicantDao {
 
 
     private static class ApplicantWithApplicationsRowMapper implements RowMapper<Applicant> {
-
         @Override
         public Applicant mapRow(ResultSet rs, int rowNum) throws SQLException {
             long currentApplicantId = rs.getLong("applicant_id");
@@ -82,23 +92,21 @@ public class ApplicantDaoImpl implements ApplicantDao {
             Applicant applicant = new Applicant(currentApplicantId, name, skills, new HashSet<>());
 
             do {
-                long applicationId = rs.getLong("app.id"); // Replace "app.id" with actual column name in the 'application' table
+                long applicationId = rs.getLong("a_id");
                 if (!rs.wasNull()) {
-                    // Create JobOffer object (assuming you have a no-arg constructor and setters)
                     JobOffer jobOffer = new JobOffer();
                     jobOffer.setId(rs.getLong("job_offer_id"));
 
-                    // Create Application object
                     Application application = new Application();
                     application.setId(applicationId);
                     application.setJobOffer(jobOffer);
-                    application.setApplicant(applicant); // Set the current applicant
+                    application.setApplicant(applicant);
                     application.setStatus(rs.getString("status"));
                     application.setApplicationDate(rs.getTimestamp("application_date"));
 
                     applicant.getApplications().add(application);
                 }
-            } while (rs.next() && rs.getLong("applicant_id") == currentApplicantId);
+            } while (rs.next() && rs.getLong("application_id") == currentApplicantId);
 
             return applicant;
         }

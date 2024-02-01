@@ -1,9 +1,12 @@
-package com.example.discoveryclient.applicant.infrastructure;
+package com.example.discoveryclient.applicant.infrastructure.entity;
 
 import com.example.discoveryclient.application.Application;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,14 +33,9 @@ public class Applicant implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public Applicant(long id, String name, String skills) {
-        this.id = id;
-        this.name = name;
-        this.skills = skills;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -47,7 +45,23 @@ public class Applicant implements Serializable {
     @Column(name = "skills")
     private String skills;
 
-    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
+    public Applicant setSkills(String skills) {
+        this.skills = skills;
+        return this;
+    }
+
+    public Applicant(String name, String skills) {
+        this.name = name;
+        this.skills = skills;
+    }
+
+    public Applicant(Long id, String name, String skills) {
+        this.id = id;
+        this.name = name;
+        this.skills = skills;
+    }
+
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Setter
     private Set<Application> applications;
 

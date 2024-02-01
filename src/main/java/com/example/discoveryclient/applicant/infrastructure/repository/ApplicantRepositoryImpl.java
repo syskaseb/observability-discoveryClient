@@ -1,7 +1,8 @@
-package com.example.discoveryclient.applicant.infrastructure;
+package com.example.discoveryclient.applicant.infrastructure.repository;
 
 import com.example.discoveryclient.applicant.domain.repository.ApplicantRepository;
-import com.example.discoveryclient.applicant.infrastructure.dao.ApplicantDao;
+import com.example.discoveryclient.applicant.infrastructure.repository.dao.ApplicantDao;
+import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +21,11 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
 
     public ApplicantRepositoryImpl(ApplicantDao applicantDao) {
         this.applicantDAO = applicantDao;
+    }
+
+    @Override
+    public Page<Applicant> findAll(Pageable pageable) {
+        return applicantDAO.findAll(pageable);
     }
 
     @Override
@@ -44,10 +50,5 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     @CacheEvict(value = "applicants", key = "#id")
     public void deleteById(long id) {
         applicantDAO.deleteById(id);
-    }
-
-    @Override
-    public Page<Applicant> findAll(Pageable pageable) {
-        return applicantDAO.findAll(pageable);
     }
 }

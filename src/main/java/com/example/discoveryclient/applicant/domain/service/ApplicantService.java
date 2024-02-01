@@ -1,6 +1,6 @@
 package com.example.discoveryclient.applicant.domain.service;
 
-import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

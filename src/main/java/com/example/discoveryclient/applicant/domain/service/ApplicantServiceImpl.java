@@ -1,7 +1,7 @@
 package com.example.discoveryclient.applicant.domain.service;
 
 import com.example.discoveryclient.applicant.domain.repository.ApplicantRepository;
-import com.example.discoveryclient.applicant.infrastructure.Applicant;
+import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
