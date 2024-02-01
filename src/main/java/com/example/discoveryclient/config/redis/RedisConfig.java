@@ -1,4 +1,4 @@
-package com.example.discoveryclient.config;
+package com.example.discoveryclient.config.redis;
 
 import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import org.springframework.context.annotation.Bean;
