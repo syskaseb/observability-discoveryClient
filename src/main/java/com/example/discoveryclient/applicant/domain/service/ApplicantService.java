@@ -1,19 +1,23 @@
 package com.example.discoveryclient.applicant.domain.service;
 
-import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
-import org.springframework.data.domain.Page;
+import com.example.discoveryclient.applicant.application.dto.ApplicantDto;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ApplicantService {
-    Page<Applicant> findAll(Pageable pageable);
 
-    Optional<Applicant> findById(Long id);
+    ResponseEntity<PagedModel<EntityModel<ApplicantDto>>> getAllApplicants(Pageable pageable);
 
-    Applicant save(Applicant applicant);
 
-    void update(Applicant applicant);
+    ResponseEntity<EntityModel<ApplicantDto>> getApplicantById(Long id);
 
-    void deleteById(Long id);
+    ResponseEntity<EntityModel<ApplicantDto>> createApplicant(ApplicantDto applicantDto);
+
+    ResponseEntity<EntityModel<ApplicantDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantDto applicantDto);
+
+    ResponseEntity<Object> deleteApplicant(@PathVariable Long id);
 }

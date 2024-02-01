@@ -2,9 +2,7 @@ package com.example.discoveryclient.applicant.application.controller;
 
 import com.example.discoveryclient.applicant.application.dto.ApplicantDto;
 import com.example.discoveryclient.applicant.domain.service.ApplicantService;
-import com.example.discoveryclient.applicant.infrastructure.entity.Applicant;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.RepositoryLinksResource;
 import org.springframework.data.web.PageableDefault;
@@ -23,16 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/applicants")
 public class ApplicantController implements RepresentationModelProcessor<RepositoryLinksResource> {
-    private static final String APPLICANTS_REL = "applicants";
 
     private final ApplicantService applicantService;
 
@@ -40,22 +32,7 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
     public ResponseEntity<PagedModel<EntityModel<ApplicantDto>>> getAllApplicants(
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        Page<Applicant> applicantPage = applicantService.findAll(pageable);
-        List<EntityModel<ApplicantDto>> applicantModels = applicantPage.getContent().stream()
-                .map(ApplicantDto::fromEntity)
-                .map(applicantDto -> EntityModel.of(applicantDto,
-                        linkTo(methodOn(ApplicantController.class).getApplicantById(applicantDto.getId())).withSelfRel(),
-                        linkTo(ApplicantController.class).slash(applicantDto.getId()).withRel(APPLICANTS_REL)))
-                .toList();
-
-        PagedModel<EntityModel<ApplicantDto>> pagedModel = PagedModel.of(applicantModels,
-                new PagedModel.PageMetadata(
-                        pageable.getPageSize(),
-                        pageable.getPageNumber(),
-                        applicantPage.getTotalElements(),
-                        applicantPage.getTotalPages()));
-
-        return ResponseEntity.ok(pagedModel);
+        return applicantService.getAllApplicants(pageable);
     }
 
     @Override
@@ -64,7 +41,7 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                         .methodOn(ApplicantController.class)
                         .getAllApplicants(null)) + "{?page,size,sort}",
-                APPLICANTS_REL);
+                "applicants");
 
         resource.add(applicantsLink);
         return resource;
@@ -72,46 +49,21 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ApplicantDto>> getApplicantById(@PathVariable Long id) {
-        return applicantService.findById(id)
-                .map(ApplicantDto::fromEntity)
-                .map(applicant -> EntityModel.of(applicant,
-                        linkTo(methodOn(ApplicantController.class)
-                                .getApplicantById(applicant.getId())).withSelfRel(),
-                        linkTo(methodOn(ApplicantController.class)
-                                .getAllApplicants(Pageable.ofSize(20))).withRel(APPLICANTS_REL)))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return applicantService.getApplicantById(id);
     }
 
     @PostMapping
     public ResponseEntity<EntityModel<ApplicantDto>> createApplicant(@RequestBody ApplicantDto applicantDto) {
-        Applicant savedApplicant = applicantService.save(applicantDto.toNewEntity());
-        return ResponseEntity.ok(EntityModel.of(applicantDto,
-                linkTo(methodOn(ApplicantController.class)
-                        .getApplicantById(savedApplicant.getId())).withSelfRel()));
+        return applicantService.createApplicant(applicantDto);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<EntityModel<ApplicantDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantDto applicantDto) {
-        return applicantService.findById(id)
-                .map(it -> {
-                    Applicant updatedApplicant = it.setSkills(applicantDto.getSkills());
-                    applicantService.update(updatedApplicant);
-                    return EntityModel.of(applicantDto,
-                            linkTo(methodOn(ApplicantController.class)
-                                    .getApplicantById(updatedApplicant.getId())).withSelfRel());
-                })
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return applicantService.updateApplicant(id, applicantDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteApplicant(@PathVariable Long id) {
-        return applicantService.findById(id)
-                .map(it -> {
-                    applicantService.deleteById(it.getId());
-                    return ResponseEntity.ok().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return applicantService.deleteApplicant(id);
     }
 }
