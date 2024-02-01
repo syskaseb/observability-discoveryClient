@@ -1,6 +1,5 @@
 package com.example.discoveryclient.csvimport;
 
-import com.example.discoveryclient.csvimport.CsvImportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;

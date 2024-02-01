@@ -10,11 +10,15 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.bind.annotation.RestController;
 
 @EnableRetry
 @EnableCaching
+@EnableNeo4jRepositories
+@EnableMongoRepositories
 @EnableJpaRepositories
 @EnableDiscoveryClient
 @SpringBootApplication

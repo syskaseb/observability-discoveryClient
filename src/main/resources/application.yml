@@ -25,6 +25,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGODB_USER:root}:${MONGODB_PASSWORD:example}@localhost:27017/admin
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: ${NEO4J_USER:neo4j}
+      password: ${NEO4J_PASSWORD:password}
 
 server:
   port: 8085

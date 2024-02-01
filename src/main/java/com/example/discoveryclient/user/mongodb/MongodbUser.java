@@ -1,4 +1,4 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.user.mongodb;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Getter
-public class User {
+public class MongodbUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        MongodbUser user = (MongodbUser) o;
 
         return getEmail() != null ? getEmail().equals(user.getEmail()) : user.getEmail() == null;
     }
