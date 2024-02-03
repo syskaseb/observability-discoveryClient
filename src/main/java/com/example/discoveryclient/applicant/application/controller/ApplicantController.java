@@ -2,6 +2,9 @@ package com.example.discoveryclient.applicant.application.controller;
 
 import com.example.discoveryclient.applicant.application.dto.ApplicantDto;
 import com.example.discoveryclient.applicant.domain.service.ApplicantService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.RepositoryLinksResource;
