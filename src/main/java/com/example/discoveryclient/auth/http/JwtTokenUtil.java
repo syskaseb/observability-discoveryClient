@@ -1,14 +1,16 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.auth.http;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,20 +18,17 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret}")
-    private String base64Secret;
-
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    private final JwtTokenProperties jwtTokenProperties;
 
     private SecretKey secretKey;
 
     @PostConstruct
     public void init() {
-        byte[] keyBytes = Base64.getDecoder().decode(base64Secret);
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes); // Ensure compatibility
+        byte[] keyBytes = Base64.getDecoder().decode(jwtTokenProperties.secret().getBytes(StandardCharsets.UTF_8));
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -42,7 +41,7 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenProperties.expiration() * 1000))
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -54,10 +53,6 @@ public class JwtTokenUtil {
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -74,7 +69,7 @@ public class JwtTokenUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        Date expDate = getClaimFromToken(token, Claims::getExpiration);
+        return expDate.before(new Date());
     }
 }

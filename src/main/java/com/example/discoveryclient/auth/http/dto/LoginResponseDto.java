@@ -1,4 +1,4 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.auth.http.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

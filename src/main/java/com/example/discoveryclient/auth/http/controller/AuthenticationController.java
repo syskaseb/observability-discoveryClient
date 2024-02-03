@@ -1,6 +1,9 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.auth.http.controller;
 
-import com.example.discoveryclient.user.postgres.PostgresUser;
+import com.example.discoveryclient.auth.http.JwtTokenUtil;
+import com.example.discoveryclient.auth.http.service.impl.JwtUserDetailsService;
+import com.example.discoveryclient.auth.http.dto.LoginRequestDto;
+import com.example.discoveryclient.auth.http.dto.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

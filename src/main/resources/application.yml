@@ -47,4 +47,4 @@ eureka:
 
 jwt:
   secret: ${JWT_SECRET:4t2OcI9neLkUD+WPsQuAxpjzT6BFQHMc/JNaiAyCFNQIyWAsSGauuxZzV9Hxgc+G8+OqlK3hIaTjRrKSxLoRbw==}
-  expiration: 604800 # Token expiration in seconds (e.g., 604800 seconds = 7 days)
+  expiration: 604800

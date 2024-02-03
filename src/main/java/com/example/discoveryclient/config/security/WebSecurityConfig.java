@@ -1,7 +1,7 @@
 package com.example.discoveryclient.config.security;
 
-import com.example.discoveryclient.user.JwtAuthEntryPoint;
-import com.example.discoveryclient.user.JwtRequestFilter;
+import com.example.discoveryclient.auth.http.JwtAuthEntryPoint;
+import com.example.discoveryclient.auth.http.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

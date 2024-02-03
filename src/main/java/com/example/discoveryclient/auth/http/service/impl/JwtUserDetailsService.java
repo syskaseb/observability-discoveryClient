@@ -1,5 +1,6 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.auth.http.service.impl;
 
+import com.example.discoveryclient.auth.http.dto.LoginRequestDto;
 import com.example.discoveryclient.user.postgres.PostgresUser;
 import com.example.discoveryclient.user.postgres.PostgresUserRepository;
 import lombok.RequiredArgsConstructor;

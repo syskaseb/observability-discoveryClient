@@ -1,4 +1,4 @@
-package com.example.discoveryclient.user;
+package com.example.discoveryclient.auth.http;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
