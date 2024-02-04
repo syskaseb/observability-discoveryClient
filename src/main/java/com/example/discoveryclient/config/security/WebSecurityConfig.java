@@ -46,7 +46,13 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(it -> it
-                        .requestMatchers("/authenticate", "/register", "/greeting", "/swagger-ui/**", "/v3/**").permitAll()
+                        .requestMatchers(
+                                "/authenticate",
+                                "/register",
+                                "/greeting",
+                                "/swagger-ui/**",
+                                "/v3/**",
+                                "/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(it -> it
                         .authenticationEntryPoint(jwtAuthEntryPoint))

@@ -42,12 +42,18 @@ public class DiscoveryClientApplication implements GreetingController {
 
     @Override
     public String greeting() {
+        String msg;
         if (environment != null) {
             int port = Integer.parseInt(environment.getProperty("local.server.port", "0"));
-            return String.format(
-                    "Hello from '%s'! Service is running on port %d", eurekaClient.getApplication(appName).getName(), port);
+            if (eurekaClient.getApplication(appName) != null) {
+                msg = String.format(
+                        "Hello from '%s'! Service is running on port %d", eurekaClient.getApplication(appName).getName(), port);
+            } else {
+                msg = "Could not obtain application name from discovery client";
+            }
         } else {
-            return "Error retrieving port information.";
+            msg = "Error retrieving port information.";
         }
+        return msg;
     }
 }
