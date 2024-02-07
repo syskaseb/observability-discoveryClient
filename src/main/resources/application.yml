@@ -48,3 +48,9 @@ eureka:
 jwt:
   secret: ${JWT_SECRET:4t2OcI9neLkUD+WPsQuAxpjzT6BFQHMc/JNaiAyCFNQIyWAsSGauuxZzV9Hxgc+G8+OqlK3hIaTjRrKSxLoRbw==}
   expiration: 604800
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
