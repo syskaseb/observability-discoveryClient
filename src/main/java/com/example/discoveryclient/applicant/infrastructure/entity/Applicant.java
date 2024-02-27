@@ -1,8 +1,6 @@
 package com.example.discoveryclient.applicant.infrastructure.entity;
 
 import com.example.discoveryclient.application.Application;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
