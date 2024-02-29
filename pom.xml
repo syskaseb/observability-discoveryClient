@@ -12,129 +12,19 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>discoveryClient</name>
     <description>discoveryClient</description>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>blocking-api</module>
+        <module>non-blocking-api</module>
+    </modules>
+
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <hibernate-tools.version>6.2.7.Final</hibernate-tools.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.danielwegener</groupId>
-            <artifactId>logback-kafka-appender</artifactId>
-            <version>0.2.0-RC2</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>janino</artifactId>
-            <version>3.1.10</version>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-neo4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.11.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.2</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
-    </dependencies>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -164,54 +54,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <configuration>
-                    <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- https://mvnrepository.com/artifact/org.hibernate.tool/hibernate-tools-maven -->
-                <groupId>org.hibernate.tool</groupId>
-                <artifactId>hibernate-tools-maven</artifactId>
-                <version>${hibernate-tools.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.hibernate.tool</groupId>
-                        <artifactId>hibernate-tools-orm</artifactId>
-                        <version>${hibernate-tools.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>42.6.0</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>entity-generation</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>hbm2java</goal>
-                        </goals>
-                        <configuration>
-                            <propertyFile>src/main/resources/hibernate-tools/hibernate.properties</propertyFile>
-                            <revengFile>src/main/resources/reveng.xml</revengFile>
-                            <outputDirectory>target/generated-sources/annotations</outputDirectory>
-                            <packageName>com.example.discoveryclient.sometest</packageName>
-                            <ejb3>true</ejb3>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
 </project>
