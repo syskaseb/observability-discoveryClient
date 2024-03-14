@@ -16,12 +16,6 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yml
     clear-checksums: true
-  cache:
-    type: redis
-    redis:
-      host: localhost
-      port: 6379
-      time-to-live: 60000
   data:
     mongodb:
       uri: mongodb://${MONGODB_USER:root}:${MONGODB_PASSWORD:example}@localhost:27017/admin
