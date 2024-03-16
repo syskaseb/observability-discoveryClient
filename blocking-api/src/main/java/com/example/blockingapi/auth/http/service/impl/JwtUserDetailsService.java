@@ -22,12 +22,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        PostgresUser user = userRepository.findByUsername(username);
-        if (user != null) {
-            return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
-        } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+        return userRepository.findByUsername(username)
+                .map(user -> new User(user.getUsername(), user.getPassword(), new ArrayList<>()))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
     public PostgresUser save(LoginRequestDto user) {
@@ -36,5 +33,9 @@ public class JwtUserDetailsService implements UserDetailsService {
                 bcryptEncoder.encode(user.getPassword()));
 
         return userRepository.save(newUser);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 }

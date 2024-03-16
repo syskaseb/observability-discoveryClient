@@ -1,10 +1,11 @@
 package com.example.blockingapi.auth.http.controller;
 
 import com.example.blockingapi.auth.http.JwtTokenUtil;
-import com.example.blockingapi.auth.http.service.impl.JwtUserDetailsService;
 import com.example.blockingapi.auth.http.dto.LoginRequestDto;
 import com.example.blockingapi.auth.http.dto.LoginResponseDto;
+import com.example.blockingapi.auth.http.service.impl.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,13 +27,16 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginRequestDto loginRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());
+        String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> saveUser(@RequestBody LoginRequestDto user) {
+        if (userDetailsService.existsByUsername(user.getUsername())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Name already taken");
+        }
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 }
