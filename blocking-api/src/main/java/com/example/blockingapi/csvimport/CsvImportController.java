@@ -2,6 +2,7 @@ package com.example.blockingapi.csvimport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/csv")
@@ -26,9 +29,10 @@ public class CsvImportController {
         return new RedirectView("/csvUpload.html");
     }
 
+    @Async
     @PostMapping("/upload")
-    public ResponseEntity<Object> uploadCsvFile(@RequestParam("file") MultipartFile file) {
+    public CompletableFuture<ResponseEntity<Object>> uploadCsvFile(@RequestParam("file") MultipartFile file) {
         csvImportService.importDataFromCsv(file);
-        return ResponseEntity.ok("File uploaded and processed successfully");
+        return CompletableFuture.completedFuture(ResponseEntity.ok("File uploaded and processed successfully"));
     }
 }

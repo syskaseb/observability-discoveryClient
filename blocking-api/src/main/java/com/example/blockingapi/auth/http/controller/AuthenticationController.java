@@ -5,6 +5,7 @@ import com.example.blockingapi.auth.http.dto.LoginRequestDto;
 import com.example.blockingapi.auth.http.dto.LoginResponseDto;
 import com.example.blockingapi.auth.http.service.impl.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -29,6 +31,7 @@ public class AuthenticationController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
+        log.info("user {} authenticated", loginRequestDto.getUsername());
         return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
@@ -37,6 +40,7 @@ public class AuthenticationController {
         if (userDetailsService.existsByUsername(user.getUsername())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Name already taken");
         }
+        log.info("user {} registered", user.getUsername());
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 }

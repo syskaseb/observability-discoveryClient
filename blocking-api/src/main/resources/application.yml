@@ -48,3 +48,14 @@ management:
     web:
       exposure:
         include: health,info
+
+resilience4j.circuitbreaker:
+  instances:
+    applicantService:
+      registerHealthIndicator: true
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 10
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
