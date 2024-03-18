@@ -154,40 +154,40 @@
                     <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
-            <plugin>
-                <!-- https://mvnrepository.com/artifact/org.hibernate.tool/hibernate-tools-maven -->
-                <groupId>org.hibernate.tool</groupId>
-                <artifactId>hibernate-tools-maven</artifactId>
-                <version>${hibernate-tools.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.hibernate.tool</groupId>
-                        <artifactId>hibernate-tools-orm</artifactId>
-                        <version>${hibernate-tools.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>42.6.0</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>entity-generation</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>hbm2java</goal>
-                        </goals>
-                        <configuration>
-                            <propertyFile>src/main/resources/hibernate-tools/hibernate.properties</propertyFile>
-                            <revengFile>src/main/resources/reveng.xml</revengFile>
-                            <outputDirectory>target/generated-sources/annotations</outputDirectory>
-                            <packageName>com.example.blockingapi.sometest</packageName>
-                            <ejb3>true</ejb3>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                &lt;!&ndash; https://mvnrepository.com/artifact/org.hibernate.tool/hibernate-tools-maven &ndash;&gt;-->
+<!--                <groupId>org.hibernate.tool</groupId>-->
+<!--                <artifactId>hibernate-tools-maven</artifactId>-->
+<!--                <version>${hibernate-tools.version}</version>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.hibernate.tool</groupId>-->
+<!--                        <artifactId>hibernate-tools-orm</artifactId>-->
+<!--                        <version>${hibernate-tools.version}</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.postgresql</groupId>-->
+<!--                        <artifactId>postgresql</artifactId>-->
+<!--                        <version>42.6.0</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>entity-generation</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>hbm2java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <propertyFile>src/main/resources/hibernate-tools/hibernate.properties</propertyFile>-->
+<!--                            <revengFile>src/main/resources/reveng.xml</revengFile>-->
+<!--                            <outputDirectory>target/generated-sources/annotations</outputDirectory>-->
+<!--                            <packageName>com.example.blockingapi.sometest</packageName>-->
+<!--                            <ejb3>true</ejb3>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
