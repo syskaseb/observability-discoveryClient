@@ -3,6 +3,7 @@ package com.example.blockingapi.csvimport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class CsvImportServiceImpl implements CsvImportService {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Async
     @Transactional
     @Override
     public void importDataFromCsv(MultipartFile csvFile) {
@@ -31,7 +33,7 @@ public class CsvImportServiceImpl implements CsvImportService {
                     .map(line -> line.split(","))
                     .forEach(row -> {
                         if (row.length < 8) {
-                            log.warn("Row does not have enough data: " + Arrays.toString(row));
+                            log.warn("Row does not have enough data: {}", Arrays.toString(row));
                             return;
                         }
                         try {
