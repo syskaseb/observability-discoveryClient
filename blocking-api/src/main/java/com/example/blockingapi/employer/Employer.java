@@ -2,6 +2,7 @@ package com.example.blockingapi.employer;
 
 
 import com.example.blockingapi.joboffer.JobOffer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ public class Employer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @Column(name = "name")
@@ -36,6 +38,7 @@ public class Employer {
     private String industry;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<JobOffer> jobOffers = new HashSet<>();
 
     @Override

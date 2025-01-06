@@ -1,8 +1,7 @@
 package com.example.blockingapi.applicant.application.controller;
 
-import com.example.blockingapi.applicant.application.dto.ApplicantCreateRequestDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantCreateUpdateRequestDto;
 import com.example.blockingapi.applicant.application.dto.ApplicantResponseDto;
-import com.example.blockingapi.applicant.application.dto.ApplicantUpdateRequestDto;
 import com.example.blockingapi.applicant.domain.service.ApplicantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -55,12 +54,12 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
     }
 
     @PostMapping
-    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(@RequestBody ApplicantCreateRequestDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(@RequestBody ApplicantCreateUpdateRequestDto applicantDto) {
         return applicantService.createApplicant(applicantDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantUpdateRequestDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantCreateUpdateRequestDto applicantDto) {
         return applicantService.updateApplicant(id, applicantDto);
     }
 

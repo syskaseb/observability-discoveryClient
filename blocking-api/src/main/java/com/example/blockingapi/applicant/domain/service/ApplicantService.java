@@ -1,8 +1,7 @@
 package com.example.blockingapi.applicant.domain.service;
 
 import com.example.blockingapi.applicant.application.dto.ApplicantResponseDto;
-import com.example.blockingapi.applicant.application.dto.ApplicantCreateRequestDto;
-import com.example.blockingapi.applicant.application.dto.ApplicantUpdateRequestDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantCreateUpdateRequestDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -17,9 +16,9 @@ public interface ApplicantService {
 
     ResponseEntity<EntityModel<ApplicantResponseDto>> getApplicantById(Long id);
 
-    ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(ApplicantCreateRequestDto applicantDto);
+    ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(ApplicantCreateUpdateRequestDto applicantDto);
 
-    ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantUpdateRequestDto applicantDto);
+    ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantCreateUpdateRequestDto applicantDto);
 
     ResponseEntity<Object> deleteApplicant(@PathVariable Long id);
 }

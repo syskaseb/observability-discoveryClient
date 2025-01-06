@@ -1,9 +1,8 @@
 package com.example.blockingapi.applicant.domain.service;
 
 import com.example.blockingapi.applicant.application.controller.ApplicantController;
-import com.example.blockingapi.applicant.application.dto.ApplicantCreateRequestDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantCreateUpdateRequestDto;
 import com.example.blockingapi.applicant.application.dto.ApplicantResponseDto;
-import com.example.blockingapi.applicant.application.dto.ApplicantUpdateRequestDto;
 import com.example.blockingapi.applicant.domain.repository.ApplicantRepository;
 import com.example.blockingapi.applicant.infrastructure.entity.Applicant;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -74,7 +73,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(ApplicantCreateRequestDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(ApplicantCreateUpdateRequestDto applicantDto) {
         Applicant savedApplicant = applicantRepository.save(applicantDto.toNewEntity());
         return ResponseEntity.ok(EntityModel.of(ApplicantResponseDto.fromEntity(savedApplicant),
                 linkTo(methodOn(ApplicantController.class)
@@ -83,7 +82,7 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     @Transactional
-    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(Long id, ApplicantUpdateRequestDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(Long id, ApplicantCreateUpdateRequestDto applicantDto) {
         return applicantRepository.findById(id)
                 .map(applicant -> {
                     Applicant updatedApplicant = applicant.setSkills(applicantDto.getSkills());

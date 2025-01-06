@@ -8,18 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-public class ApplicantUpdateRequestDto {
+public class ApplicantCreateUpdateRequestDto {
 
-    private Long id;
     private String name;
     private String skills;
-
-    public static ApplicantUpdateRequestDto fromEntity(Applicant applicant) {
-        return ApplicantUpdateRequestDto.of(
-                applicant.getId(),
-                applicant.getName(),
-                applicant.getSkills());
-    }
 
     public Applicant toNewEntity() {
         return new Applicant(name, skills);
