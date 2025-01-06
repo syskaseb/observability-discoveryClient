@@ -54,11 +54,10 @@
         </sql>
         <rollback>
             <sql>
-                DROP TABLE IF EXISTS employer;
                 DROP TABLE IF EXISTS applicant;
-                DROP TABLE IF EXISTS job_offer;
                 DROP TABLE IF EXISTS application;
-                DROP TABLE IF EXISTS applicant;
+                DROP TABLE IF EXISTS job_offer;
+                DROP TABLE IF EXISTS employer;
                 DROP TABLE IF EXISTS some_test;
             </sql>
         </rollback>

@@ -34,6 +34,7 @@ public class Applicant implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -51,10 +52,6 @@ public class Applicant implements Serializable {
     public Applicant(String name, String skills) {
         this.name = name;
         this.skills = skills;
-    }
-
-    public void setIdExternal(Long id) {
-        this.id = id;
     }
 
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)

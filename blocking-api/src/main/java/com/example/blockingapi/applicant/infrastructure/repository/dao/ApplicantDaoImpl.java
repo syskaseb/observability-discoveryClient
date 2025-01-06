@@ -63,9 +63,8 @@ public class ApplicantDaoImpl implements ApplicantDao {
             return ps;
         }, keyHolder);
 
-        Optional.ofNullable(keyHolder.getKey()).ifPresent(key ->
-                applicant.setIdExternal(key.longValue())
-        );
+        Optional.ofNullable(keyHolder.getKey())
+                .ifPresent(key -> applicant.setId(key.longValue()));
 
         return applicant;
     }
