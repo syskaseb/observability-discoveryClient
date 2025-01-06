@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -34,8 +35,8 @@ public class Employer {
     @Column(name = "industry")
     private String industry;
 
-    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<JobOffer> jobOffers;
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<JobOffer> jobOffers = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

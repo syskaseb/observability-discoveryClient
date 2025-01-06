@@ -1,7 +1,9 @@
 package com.example.blockingapi.applicant.domain.service;
 
 import com.example.blockingapi.applicant.application.controller.ApplicantController;
-import com.example.blockingapi.applicant.application.dto.ApplicantDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantCreateRequestDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantResponseDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantUpdateRequestDto;
 import com.example.blockingapi.applicant.domain.repository.ApplicantRepository;
 import com.example.blockingapi.applicant.infrastructure.entity.Applicant;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -33,16 +35,16 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     @Retryable(retryFor = Exception.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
     @CircuitBreaker(name = "applicantService", fallbackMethod = "fallbackFindAll")
-    public ResponseEntity<PagedModel<EntityModel<ApplicantDto>>> getAllApplicants(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<ApplicantResponseDto>>> getAllApplicants(Pageable pageable) {
         Page<Applicant> applicantPage = applicantRepository.findAll(pageable);
-        List<EntityModel<ApplicantDto>> applicantModels = applicantPage.getContent().stream()
-                .map(ApplicantDto::fromEntity)
+        List<EntityModel<ApplicantResponseDto>> applicantModels = applicantPage.getContent().stream()
+                .map(ApplicantResponseDto::fromEntity)
                 .map(applicantDto -> EntityModel.of(applicantDto,
                         linkTo(methodOn(ApplicantController.class).getApplicantById(applicantDto.getId())).withSelfRel(),
                         linkTo(ApplicantController.class).slash(applicantDto.getId()).withRel("applicants")))
                 .toList();
 
-        PagedModel<EntityModel<ApplicantDto>> pagedModel = PagedModel.of(applicantModels,
+        PagedModel<EntityModel<ApplicantResponseDto>> pagedModel = PagedModel.of(applicantModels,
                 new PagedModel.PageMetadata(
                         pageable.getPageSize(),
                         pageable.getPageNumber(),
@@ -59,9 +61,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
 
     @Override
-    public ResponseEntity<EntityModel<ApplicantDto>> getApplicantById(Long id) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> getApplicantById(Long id) {
         return applicantRepository.findById(id)
-                .map(ApplicantDto::fromEntity)
+                .map(ApplicantResponseDto::fromEntity)
                 .map(applicant -> EntityModel.of(applicant,
                         linkTo(methodOn(ApplicantController.class)
                                 .getApplicantById(applicant.getId())).withSelfRel(),
@@ -72,22 +74,21 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ResponseEntity<EntityModel<ApplicantDto>> createApplicant(ApplicantDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(ApplicantCreateRequestDto applicantDto) {
         Applicant savedApplicant = applicantRepository.save(applicantDto.toNewEntity());
-        return ResponseEntity.ok(EntityModel.of(applicantDto,
+        return ResponseEntity.ok(EntityModel.of(ApplicantResponseDto.fromEntity(savedApplicant),
                 linkTo(methodOn(ApplicantController.class)
                         .getApplicantById(savedApplicant.getId())).withSelfRel()));
-
     }
 
     @Override
     @Transactional
-    public ResponseEntity<EntityModel<ApplicantDto>> updateApplicant(Long id, ApplicantDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(Long id, ApplicantUpdateRequestDto applicantDto) {
         return applicantRepository.findById(id)
-                .map(it -> {
-                    Applicant updatedApplicant = it.setSkills(applicantDto.getSkills());
+                .map(applicant -> {
+                    Applicant updatedApplicant = applicant.setSkills(applicantDto.getSkills());
                     applicantRepository.update(updatedApplicant);
-                    return EntityModel.of(applicantDto,
+                    return EntityModel.of(ApplicantResponseDto.fromEntity(applicant),
                             linkTo(methodOn(ApplicantController.class)
                                     .getApplicantById(updatedApplicant.getId())).withSelfRel());
                 })

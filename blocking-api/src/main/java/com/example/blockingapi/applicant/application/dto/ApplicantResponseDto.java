@@ -12,25 +12,21 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-public class ApplicantDto {
+public class ApplicantResponseDto {
 
     private Long id;
     private String name;
     private String skills;
     private Set<ApplicationDto> applicationDtos;
 
-    public static ApplicantDto fromEntity(Applicant applicant) {
-        return ApplicantDto.of(
+    public static ApplicantResponseDto fromEntity(Applicant applicant) {
+        return ApplicantResponseDto.of(
                 applicant.getId(),
                 applicant.getName(),
                 applicant.getSkills(),
                 applicant.getApplications().stream()
                         .map(ApplicationDto::fromEntity)
                         .collect(Collectors.toSet()));
-    }
-
-    public Applicant toNewEntity() {
-        return new Applicant(name, skills);
     }
 }
 

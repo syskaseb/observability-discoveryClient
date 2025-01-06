@@ -18,6 +18,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -53,15 +54,9 @@ public class Applicant implements Serializable {
         this.skills = skills;
     }
 
-    public Applicant(Long id, String name, String skills) {
-        this.id = id;
-        this.name = name;
-        this.skills = skills;
-    }
-
-    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @Setter
-    private Set<Application> applications;
+    private Set<Application> applications = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

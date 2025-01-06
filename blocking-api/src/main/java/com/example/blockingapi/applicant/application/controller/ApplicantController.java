@@ -1,10 +1,9 @@
 package com.example.blockingapi.applicant.application.controller;
 
-import com.example.blockingapi.applicant.application.dto.ApplicantDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantCreateRequestDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantResponseDto;
+import com.example.blockingapi.applicant.application.dto.ApplicantUpdateRequestDto;
 import com.example.blockingapi.applicant.domain.service.ApplicantService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.RepositoryLinksResource;
@@ -32,7 +31,7 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
     private final ApplicantService applicantService;
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<ApplicantDto>>> getAllApplicants(
+    public ResponseEntity<PagedModel<EntityModel<ApplicantResponseDto>>> getAllApplicants(
             @PageableDefault(size = 20) Pageable pageable
     ) {
         return applicantService.getAllApplicants(pageable);
@@ -51,17 +50,17 @@ public class ApplicantController implements RepresentationModelProcessor<Reposit
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<ApplicantDto>> getApplicantById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> getApplicantById(@PathVariable Long id) {
         return applicantService.getApplicantById(id);
     }
 
     @PostMapping
-    public ResponseEntity<EntityModel<ApplicantDto>> createApplicant(@RequestBody ApplicantDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> createApplicant(@RequestBody ApplicantCreateRequestDto applicantDto) {
         return applicantService.createApplicant(applicantDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EntityModel<ApplicantDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantDto applicantDto) {
+    public ResponseEntity<EntityModel<ApplicantResponseDto>> updateApplicant(@PathVariable Long id, @RequestBody ApplicantUpdateRequestDto applicantDto) {
         return applicantService.updateApplicant(id, applicantDto);
     }
 

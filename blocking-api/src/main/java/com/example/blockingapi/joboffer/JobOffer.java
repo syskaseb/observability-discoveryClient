@@ -21,6 +21,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -59,8 +60,8 @@ public class JobOffer implements Serializable {
     @JoinColumn(name = "employer_id")
     private Employer employer;
 
-    @OneToMany(mappedBy = "jobOffer", cascade = CascadeType.PERSIST)
-    private Set<Application> applications;
+    @OneToMany(mappedBy = "jobOffer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<Application> applications = new HashSet<>();
 
     @Column(name = "posted_date")
     private Timestamp postedDate;

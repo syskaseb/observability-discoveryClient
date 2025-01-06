@@ -17,38 +17,38 @@ import java.util.Optional;
 @Repository
 public class ApplicantRepositoryImpl implements ApplicantRepository {
 
-    private final ApplicantDao applicantDAO;
+    private final ApplicantDao applicantDao;
 
     public ApplicantRepositoryImpl(ApplicantDao applicantDao) {
-        this.applicantDAO = applicantDao;
+        this.applicantDao = applicantDao;
     }
 
     @Override
     public Page<Applicant> findAll(Pageable pageable) {
-        return applicantDAO.findAll(pageable);
+        return applicantDao.findAll(pageable);
     }
 
     @Override
     @Cacheable(value = "applicants", key = "#id")
     public Optional<Applicant> findById(long id) {
-        return applicantDAO.findById(id);
+        return applicantDao.findById(id);
     }
 
     @Override
     @CachePut(value = "applicants", key = "#applicant.id")
     public Applicant save(Applicant applicant) {
-        return applicantDAO.save(applicant);
+        return applicantDao.save(applicant);
     }
 
     @Override
     @CachePut(value = "applicants", key = "#applicant.id")
     public void update(Applicant applicant) {
-        applicantDAO.update(applicant);
+        applicantDao.update(applicant);
     }
 
     @Override
     @CacheEvict(value = "applicants", key = "#id")
     public void deleteById(long id) {
-        applicantDAO.deleteById(id);
+        applicantDao.deleteById(id);
     }
 }
