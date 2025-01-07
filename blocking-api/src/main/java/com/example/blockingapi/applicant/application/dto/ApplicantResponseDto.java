@@ -17,7 +17,7 @@ public class ApplicantResponseDto {
     private Long id;
     private String name;
     private String skills;
-    private Set<ApplicationDto> applicationDtos;
+    private Set<ApplicationDto> applications;
 
     public static ApplicantResponseDto fromEntity(Applicant applicant) {
         return ApplicantResponseDto.of(
