@@ -3,17 +3,25 @@ package com.example.blockingapi.config.redis;
 import com.example.blockingapi.applicant.infrastructure.entity.Applicant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        return RedisCacheManager.builder(connectionFactory).build();
+        RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(5));
+
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(defaults)
+                .build();
     }
 
     @Bean
