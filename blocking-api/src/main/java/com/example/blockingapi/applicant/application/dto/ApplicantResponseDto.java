@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,7 @@ public class ApplicantResponseDto {
     private Long id;
     private String name;
     private String skills;
-    private Set<ApplicationDto> applications;
+    private Set<ApplicationDto> applications = new HashSet<>();
 
     public static ApplicantResponseDto fromEntity(Applicant applicant) {
         return ApplicantResponseDto.of(
