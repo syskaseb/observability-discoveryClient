@@ -12,13 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -53,23 +53,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         return ResponseEntity.ok(pagedModel);
     }
 
-    private ResponseEntity<PagedModel<EntityModel<ApplicantResponseDto>>> fallbackFindAll(Pageable pageable, Throwable throwable) {
-        log.warn("Fallback triggered for getAllApplicants: ", throwable);
+    public ResponseEntity<PagedModel<EntityModel<ApplicantResponseDto>>> fallbackFindAll(Pageable pageable, Throwable ex) {
+        log.error("Fallback executed for getAllApplicants due to: {}", ex.getMessage());
+        PagedModel<EntityModel<ApplicantResponseDto>> emptyPagedModel = PagedModel.empty();
 
-        List<EntityModel<ApplicantResponseDto>> emptyApplicants = Collections.emptyList();
-
-        PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(
-                pageable.getPageSize(),
-                pageable.getPageNumber(),
-                0,
-                0
-        );
-
-        PagedModel<EntityModel<ApplicantResponseDto>> emptyPagedModel = PagedModel.of(emptyApplicants, metadata);
-
-        return ResponseEntity.ok(emptyPagedModel);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(emptyPagedModel);
     }
-
 
 
     @Override
