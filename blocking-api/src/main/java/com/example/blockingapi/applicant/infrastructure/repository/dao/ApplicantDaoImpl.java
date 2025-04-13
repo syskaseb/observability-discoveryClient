@@ -28,7 +28,7 @@ public class ApplicantDaoImpl implements ApplicantDao {
 
     @Override
     public Page<Applicant> findAll(Pageable pageable) {
-        String sql = "SELECT a.id as a_id, name, skills, app.id as application_id, job_offer_id, applicant_id, status, application_date FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id LIMIT ? OFFSET ?";
+        String sql = "SELECT a.id AS applicant_id, a.name, a.skills, app.id AS application_id, app.job_offer_id AS job_offer_id, app.applicant_id AS applicant_fk, app.status, app.application_date FROM applicant a LEFT JOIN application app ON a.id = app.applicant_id LIMIT ? OFFSET ?";
         List<Applicant> applicants = jdbcTemplate.query(sql, new ApplicantWithApplicationsRowMapper(), pageable.getPageSize(), pageable.getOffset());
         long total = countTotalApplicants();
 
@@ -80,32 +80,29 @@ public class ApplicantDaoImpl implements ApplicantDao {
         jdbcTemplate.update("DELETE FROM applicant WHERE id = ?", id);
     }
 
-
     private static class ApplicantWithApplicationsRowMapper implements RowMapper<Applicant> {
         @Override
         public Applicant mapRow(ResultSet rs, int rowNum) throws SQLException {
-            long currentApplicantId = rs.getLong("applicant_id");
+            long applicantId = rs.getLong("applicant_id");
             String name = rs.getString("name");
             String skills = rs.getString("skills");
 
-            Applicant applicant = new Applicant(currentApplicantId, name, skills, new HashSet<>());
+            Applicant applicant = new Applicant(applicantId, name, skills, new HashSet<>());
 
-            do {
-                long applicationId = rs.getLong("a_id");
-                if (!rs.wasNull()) {
-                    JobOffer jobOffer = new JobOffer();
-                    jobOffer.setId(rs.getLong("job_offer_id"));
+            long applicationId = rs.getLong("application_id");
+            if (!rs.wasNull()) {
+                JobOffer jobOffer = new JobOffer();
+                jobOffer.setId(rs.getLong("job_offer_id"));
 
-                    Application application = new Application();
-                    application.setId(applicationId);
-                    application.setJobOffer(jobOffer);
-                    application.setApplicant(applicant);
-                    application.setStatus(rs.getString("status"));
-                    application.setApplicationDate(rs.getTimestamp("application_date"));
+                Application application = new Application();
+                application.setId(applicationId);
+                application.setApplicant(applicant);
+                application.setJobOffer(jobOffer);
+                application.setStatus(rs.getString("status"));
+                application.setApplicationDate(rs.getTimestamp("application_date"));
 
-                    applicant.getApplications().add(application);
-                }
-            } while (rs.next() && rs.getLong("application_id") == currentApplicantId);
+                applicant.getApplications().add(application);
+            }
 
             return applicant;
         }
