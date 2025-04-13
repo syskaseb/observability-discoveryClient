@@ -53,10 +53,23 @@ public class ApplicantServiceImpl implements ApplicantService {
         return ResponseEntity.ok(pagedModel);
     }
 
-    private List<Applicant> fallbackFindAll() {
-        log.warn("service was not responsive when finding all applicants, fallback used");
-        return Collections.emptyList();
+    private ResponseEntity<PagedModel<EntityModel<ApplicantResponseDto>>> fallbackFindAll(Pageable pageable, Throwable throwable) {
+        log.warn("Fallback triggered for getAllApplicants: ", throwable);
+
+        List<EntityModel<ApplicantResponseDto>> emptyApplicants = Collections.emptyList();
+
+        PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(
+                pageable.getPageSize(),
+                pageable.getPageNumber(),
+                0,
+                0
+        );
+
+        PagedModel<EntityModel<ApplicantResponseDto>> emptyPagedModel = PagedModel.of(emptyApplicants, metadata);
+
+        return ResponseEntity.ok(emptyPagedModel);
     }
+
 
 
     @Override
